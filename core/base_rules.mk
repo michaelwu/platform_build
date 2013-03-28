@@ -170,6 +170,10 @@ ifneq (true,$(LOCAL_UNINSTALLABLE_MODULE))
   LOCAL_INSTALLED_MODULE := $(LOCAL_MODULE_PATH)/$(LOCAL_INSTALLED_MODULE_STEM)
 endif
 
+ifneq ($(filter $(DISABLED_USER_MODULES),$(LOCAL_MODULE)),)
+LOCAL_BUILT_MODULE :=
+endif
+
 # Assemble the list of targets to create PRIVATE_ variables for.
 LOCAL_INTERMEDIATE_TARGETS += $(LOCAL_BUILT_MODULE)
 
@@ -271,10 +275,6 @@ $(proto_java_sources_file_stamp) : $(proto_sources_fullpath) $(PROTOC)
 
 LOCAL_INTERMEDIATE_TARGETS += $(proto_java_sources_file_stamp)
 endif # proto_sources
-
-ifneq ($(filter $(DISABLED_USER_MODULES),$(LOCAL_MODULE)),)
-LOCAL_BUILT_MODULE :=
-endif
 
 ###########################################################
 ## Java: Compile .java files to .class
@@ -505,9 +505,11 @@ ifndef LOCAL_UNINSTALLABLE_MODULE
   # acp and libraries that it uses can't use acp for
   # installation;  hence, LOCAL_ACP_UNAVAILABLE.
 ifneq ($(LOCAL_ACP_UNAVAILABLE),true)
+ifneq ($(filter $(DISABLED_USER_MODULES),$(LOCAL_MODULE)),)
 $(LOCAL_INSTALLED_MODULE): $(LOCAL_BUILT_MODULE) | $(ACP)
 	@echo "Install: $@"
 	$(copy-file-to-new-target)
+endif
 else
 $(LOCAL_INSTALLED_MODULE): $(LOCAL_BUILT_MODULE)
 	@echo "Install: $@"

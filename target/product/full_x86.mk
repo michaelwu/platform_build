@@ -33,7 +33,6 @@ endif
 # Ensure we package the BIOS files too.
 PRODUCT_PACKAGES += \
 	bios.bin \
-	vgabios-cirrus.bin \
 
 # Overrides
 PRODUCT_NAME := full_x86
