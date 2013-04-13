@@ -500,16 +500,17 @@ ifneq ($(strip $(HOST_ACP_UNAVAILABLE)),)
   LOCAL_ACP_UNAVAILABLE := $(strip $(HOST_ACP_UNAVAILABLE))
 endif
 
+ifneq ($(filter $(DISABLED_USER_MODULES),$(LOCAL_MODULE)),)
+LOCAL_UNINSTALLABLE_MODULE := true
+endif
 ifndef LOCAL_UNINSTALLABLE_MODULE
   # Define a copy rule to install the module.
   # acp and libraries that it uses can't use acp for
   # installation;  hence, LOCAL_ACP_UNAVAILABLE.
 ifneq ($(LOCAL_ACP_UNAVAILABLE),true)
-ifneq ($(filter $(DISABLED_USER_MODULES),$(LOCAL_MODULE)),)
 $(LOCAL_INSTALLED_MODULE): $(LOCAL_BUILT_MODULE) | $(ACP)
 	@echo "Install: $@"
 	$(copy-file-to-new-target)
-endif
 else
 $(LOCAL_INSTALLED_MODULE): $(LOCAL_BUILT_MODULE)
 	@echo "Install: $@"
