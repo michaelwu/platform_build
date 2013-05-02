@@ -21,4 +21,6 @@ DISABLED_USER_MODULES := \
 	libstagefright_chromium_http \
 	libjavacore \
 	app_process__asan \
+	libnative-media-jni \
+	xaplay \
 
